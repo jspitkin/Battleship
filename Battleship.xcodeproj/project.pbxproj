@@ -9,9 +9,7 @@
 /* Begin PBXBuildFile section */
 		77F5E95F1C9C9C5400B4269D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77F5E95E1C9C9C5400B4269D /* AppDelegate.swift */; };
 		77F5E9611C9C9C5400B4269D /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77F5E9601C9C9C5400B4269D /* ViewController.swift */; };
-		77F5E9641C9C9C5400B4269D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 77F5E9621C9C9C5400B4269D /* Main.storyboard */; };
 		77F5E9661C9C9C5400B4269D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 77F5E9651C9C9C5400B4269D /* Assets.xcassets */; };
-		77F5E9691C9C9C5400B4269D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 77F5E9671C9C9C5400B4269D /* LaunchScreen.storyboard */; };
 		77F5E9741C9C9C5400B4269D /* BattleshipTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77F5E9731C9C9C5400B4269D /* BattleshipTests.swift */; };
 		77F5E97F1C9C9C5400B4269D /* BattleshipUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77F5E97E1C9C9C5400B4269D /* BattleshipUITests.swift */; };
 /* End PBXBuildFile section */
@@ -37,9 +35,7 @@
 		77F5E95B1C9C9C5400B4269D /* Battleship.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Battleship.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		77F5E95E1C9C9C5400B4269D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		77F5E9601C9C9C5400B4269D /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		77F5E9631C9C9C5400B4269D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		77F5E9651C9C9C5400B4269D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		77F5E9681C9C9C5400B4269D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		77F5E96A1C9C9C5400B4269D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		77F5E96F1C9C9C5400B4269D /* BattleshipTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BattleshipTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		77F5E9731C9C9C5400B4269D /* BattleshipTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BattleshipTests.swift; sourceTree = "<group>"; };
@@ -99,9 +95,7 @@
 			children = (
 				77F5E95E1C9C9C5400B4269D /* AppDelegate.swift */,
 				77F5E9601C9C9C5400B4269D /* ViewController.swift */,
-				77F5E9621C9C9C5400B4269D /* Main.storyboard */,
 				77F5E9651C9C9C5400B4269D /* Assets.xcassets */,
-				77F5E9671C9C9C5400B4269D /* LaunchScreen.storyboard */,
 				77F5E96A1C9C9C5400B4269D /* Info.plist */,
 			);
 			path = Battleship;
@@ -229,9 +223,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				77F5E9691C9C9C5400B4269D /* LaunchScreen.storyboard in Resources */,
 				77F5E9661C9C9C5400B4269D /* Assets.xcassets in Resources */,
-				77F5E9641C9C9C5400B4269D /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -291,25 +283,6 @@
 			targetProxy = 77F5E97B1C9C9C5400B4269D /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
-
-/* Begin PBXVariantGroup section */
-		77F5E9621C9C9C5400B4269D /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				77F5E9631C9C9C5400B4269D /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
-		77F5E9671C9C9C5400B4269D /* LaunchScreen.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				77F5E9681C9C9C5400B4269D /* Base */,
-			);
-			name = LaunchScreen.storyboard;
-			sourceTree = "<group>";
-		};
-/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		77F5E9811C9C9C5400B4269D /* Debug */ = {
