@@ -8,7 +8,7 @@
 
 import UIKit
 
-class GameListViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class GameListViewController: UITableViewController {
     private var _gameList: GameList = GameList()
 
     private var _gameListView: UITableView?
@@ -23,25 +23,24 @@ class GameListViewController: UIViewController, UITableViewDelegate, UITableView
         _gameListView!.separatorStyle = UITableViewCellSeparatorStyle.None
         self.title = "Battleship"
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "New", style: UIBarButtonItemStyle.Plain, target: self, action: "newGame")
-        //_gameListView.registerClass(UICollectionViewCell.self, forCellWithReuseIdentifier: NSStringFromClass(UICollectionViewCell.self))
         _gameListView!.dataSource = self
         _gameListView!.delegate = self
         _gameListView!.registerClass(UITableViewCell.self, forCellReuseIdentifier: "cell")
         
     }
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return _gameList.gameCount;
     }
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell: UITableViewCell = _gameListView!.dequeueReusableCellWithIdentifier("cell")! as UITableViewCell
-        cell.textLabel?.text = "\(indexPath.item)"
+        cell.textLabel?.text = "Game \(indexPath.item + 1): In Progress"
         cell.backgroundColor = UIColor.whiteColor()
         return cell
     }
     
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         let game: Game = _gameList.gameWithIndex(indexPath.item)
         let gameIndex: Int = indexPath.item
         
@@ -61,6 +60,14 @@ class GameListViewController: UIViewController, UITableViewDelegate, UITableView
         _gameListView!.reloadData()
         self.navigationController?.pushViewController(gameViewController, animated: true)
         
+    }
+    
+    override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
+        if editingStyle == UITableViewCellEditingStyle.Delete {
+            _gameList.removeGameWithIndex(indexPath.row)
+            tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Automatic)
+        }
+        _gameListView!.reloadData()
     }
     
     override func didReceiveMemoryWarning() {
