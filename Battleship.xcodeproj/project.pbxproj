@@ -200,6 +200,7 @@
 				TargetAttributes = {
 					77F5E95A1C9C9C5400B4269D = {
 						CreatedOnToolsVersion = 7.2.1;
+						DevelopmentTeam = UVFLJ3KALN;
 					};
 					77F5E96E1C9C9C5400B4269D = {
 						CreatedOnToolsVersion = 7.2.1;
@@ -388,10 +389,13 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = Battleship/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = jsp.Battleship;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Debug;
 		};
@@ -399,10 +403,13 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = Battleship/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = jsp.Battleship;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Release;
 		};
@@ -473,6 +480,7 @@
 				77F5E9851C9C9C5400B4269D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		77F5E9861C9C9C5400B4269D /* Build configuration list for PBXNativeTarget "BattleshipTests" */ = {
 			isa = XCConfigurationList;
@@ -481,6 +489,7 @@
 				77F5E9881C9C9C5400B4269D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		77F5E9891C9C9C5400B4269D /* Build configuration list for PBXNativeTarget "BattleshipUITests" */ = {
 			isa = XCConfigurationList;
@@ -489,6 +498,7 @@
 				77F5E98B1C9C9C5400B4269D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

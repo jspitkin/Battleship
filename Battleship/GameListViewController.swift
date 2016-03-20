@@ -8,40 +8,40 @@
 
 import UIKit
 
-class GameListViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource {
-    
+class GameListViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     private var _gameList: GameList = GameList()
-    
-    private var _gameListView: UICollectionView {
-        return view as! UICollectionView
-    }
+
+    private var _gameListView: UITableView?
     
     override func loadView() {
-        let gamesLayout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
-        view = UICollectionView(frame: CGRectZero, collectionViewLayout: gamesLayout)
+        _gameListView = UITableView()
+        view = _gameListView
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        _gameListView!.separatorStyle = UITableViewCellSeparatorStyle.None
         self.title = "Battleship"
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "New", style: UIBarButtonItemStyle.Plain, target: self, action: "newGame")
-        _gameListView.registerClass(UICollectionViewCell.self, forCellWithReuseIdentifier: NSStringFromClass(UICollectionViewCell.self))
-        _gameListView.dataSource = self
-        _gameListView.delegate = self
-    }
-    
-    func newGame() {
-        let gameViewController: GameViewController = GameViewController()
-        let newGame = Game()
-        _gameList.addGame(newGame)
-        gameViewController.gameList = _gameList
-        gameViewController.gameIndex = _gameList.gameCount - 1
-        _gameListView.reloadData()
-        self.navigationController?.pushViewController(gameViewController, animated: true)
+        //_gameListView.registerClass(UICollectionViewCell.self, forCellWithReuseIdentifier: NSStringFromClass(UICollectionViewCell.self))
+        _gameListView!.dataSource = self
+        _gameListView!.delegate = self
+        _gameListView!.registerClass(UITableViewCell.self, forCellReuseIdentifier: "cell")
         
     }
     
-    func collectionView(collectionView: UICollectionView, didDeselectItemAtIndexPath indexPath: NSIndexPath) {
+    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return _gameList.gameCount;
+    }
+    
+    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        let cell: UITableViewCell = _gameListView!.dequeueReusableCellWithIdentifier("cell")! as UITableViewCell
+        cell.textLabel?.text = "\(indexPath.item)"
+        cell.backgroundColor = UIColor.whiteColor()
+        return cell
+    }
+    
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         let game: Game = _gameList.gameWithIndex(indexPath.item)
         let gameIndex: Int = indexPath.item
         
@@ -52,28 +52,20 @@ class GameListViewController: UIViewController, UICollectionViewDelegate, UIColl
         self.navigationController?.pushViewController(gameViewController, animated: true)
     }
     
-    func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return _gameList.gameCount;
-    }
-    
-    func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
+    func newGame() {
+        let gameViewController: GameViewController = GameViewController()
+        let newGame = Game()
+        _gameList.addGame(newGame)
+        gameViewController.gameList = _gameList
+        gameViewController.gameIndex = _gameList.gameCount - 1
+        _gameListView!.reloadData()
+        self.navigationController?.pushViewController(gameViewController, animated: true)
         
-        let cell: UICollectionViewCell = collectionView.dequeueReusableCellWithReuseIdentifier(NSStringFromClass(UICollectionViewCell.self), forIndexPath: indexPath)
-        cell.backgroundColor = UIColor.whiteColor()
-        
-        let title = UILabel(frame: CGRectMake(cell.bounds.width * 0.38, 5, cell.bounds.size.width, 40))
-        title.text = "\(indexPath.item + 1)"
-        
-        cell.addSubview(title)
-        return cell
     }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
-    
-    
     
 }
