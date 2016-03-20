@@ -13,6 +13,7 @@ class Game {
     // 1 - Not hit ship
     // 2 - Hit ship
     // 3 - Missed missile
+    // 4 - Sunk ship
     private var _playerOneGameBoard: Array<Array<Int>>
     private var _playerTwoGameBoard: Array<Array<Int>>
     private var _playersTurn: Int

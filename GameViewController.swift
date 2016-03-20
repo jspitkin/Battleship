@@ -13,6 +13,7 @@ class GameViewController: UIViewController {
     private var _gameList: GameList!
     private var _gameIndex: Int?
     private var _game: Game?
+    private var _gameView: GameView = GameView()    
     
     var gameList: GameList {
         get { return _gameList }
@@ -29,15 +30,21 @@ class GameViewController: UIViewController {
         set { _game = newValue }
     }
     
+    var gameView: GameView? {
+        get { return _gameView }
+        set { _gameView = newValue! }
+    }
+    
+    override func loadView() {
+        view = _gameView
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
     }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
-    
 }
