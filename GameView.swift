@@ -16,7 +16,8 @@ protocol GridDelegate: class
 class GameView: UIView {
     
     private var _clickedCellX: Int?
-    private var _clickedCellY: Int?
+    private var _clickedCellBottomY: Int?
+    private var _clickedCellTopY: Int?
     
     private var _game: Game?
     
@@ -44,24 +45,38 @@ class GameView: UIView {
         let cellSizeX = bounds.height * CGFloat(0.046)
         let cellSizeY = bounds.height * CGFloat(0.035)
         _clickedCellX = Int(touchPoint.x / cellSizeX) - 1
-        _clickedCellY = Int((touchPoint.y - bounds.height * 0.565) / cellSizeY) - 1
-        print("\(touchPoint.x),\(touchPoint.y)")
+        _clickedCellBottomY = Int((touchPoint.y - bounds.height * 0.565) / cellSizeY) - 1
+        _clickedCellTopY = Int((touchPoint.y - bounds.height * 0.2 + 20) / cellSizeY) - 1
+        print("\(touchPoint.x) , \(touchPoint.y)")
     }
     
     override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
         super.touchesEnded(touches, withEvent: event)
         let touch: UITouch = touches.first!
         let touchPoint: CGPoint = touch.locationInView(self)
+        
         let cellSizeX = bounds.height * CGFloat(0.046)
         let cellSizeY = bounds.height * CGFloat(0.035)
         let releasedCellX = Int(touchPoint.x / cellSizeX) - 1
-        let releasedCellY = Int((touchPoint.y - bounds.height * 0.565) / cellSizeY) - 1
+        let releasedCellBottomY = Int((touchPoint.y - bounds.height * 0.565) / cellSizeY) - 1
+        let releasedCellTopY = Int((touchPoint.y - bounds.height * 0.2 + 20) / cellSizeY) - 1
         
-        if (releasedCellX == _clickedCellX && releasedCellY == _clickedCellY) {
-            if (_clickedCellX >= 0 && _clickedCellX <= 9 && _clickedCellY >= 0 && _clickedCellY <= 9) {
-                delegate?.fireOnCell(_clickedCellX!, column: _clickedCellY!)
+        // Firing on bottom board
+        if (releasedCellX == _clickedCellX && releasedCellBottomY == _clickedCellBottomY && _game!.playersTurn == 1) {
+            if (_clickedCellX >= 0 && _clickedCellX <= 9 && _clickedCellBottomY >= 0 && _clickedCellBottomY <= 9) {
+                print("hit: (\(_clickedCellX!),\(_clickedCellBottomY))")
+                delegate?.fireOnCell(_clickedCellX!, column: _clickedCellBottomY!)
             }
         }
+        
+        // Firing on top board
+        if (releasedCellX == _clickedCellX && releasedCellTopY == _clickedCellTopY && _game!.playersTurn == 2) {
+            if (_clickedCellX >= 0 && _clickedCellX <= 9 && _clickedCellTopY >= 0 && _clickedCellTopY <= 9) {
+                print("hit: (\(_clickedCellX!),\(_clickedCellTopY))")
+                //delegate?.fireOnCell(_clickedCellX!, column: _clickedCellTopY!)
+            }
+        }
+        
     }
     
     override func drawRect(rect: CGRect) {

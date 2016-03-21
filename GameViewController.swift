@@ -57,6 +57,20 @@ class GameViewController: UIViewController, GridDelegate, GameDelegate, ChangeDe
         _gameInformation!.text = game.gameStatusMessage
         _gameView.game = _game!
         self.view.addSubview(_gameInformation!)
+        
+        let playerOneLabel: UILabel = UILabel(frame: CGRectMake(57, 305, 200, 30))
+        playerOneLabel.textColor = UIColor.blackColor()
+        playerOneLabel.font = UIFont.systemFontOfSize(12)
+        playerOneLabel.textAlignment = NSTextAlignment.Center
+        playerOneLabel.text = "Player One"
+        self.view.addSubview(playerOneLabel)
+        
+        let playerTwoLabel: UILabel = UILabel(frame: CGRectMake(57, 533, 200, 30))
+        playerTwoLabel.textColor = UIColor.blackColor()
+        playerTwoLabel.font = UIFont.systemFontOfSize(12)
+        playerTwoLabel.textAlignment = NSTextAlignment.Center
+        playerTwoLabel.text = "Player Two"
+        self.view.addSubview(playerTwoLabel)
     }
     
     override func didReceiveMemoryWarning() {
