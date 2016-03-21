@@ -8,23 +8,17 @@
 
 import UIKit
 
-//protocol PaintingDelegate: class
-//{
-//    func addStroke(newStroke: Stroke)
-//}
+protocol GridDelegate: class
+{
+    func fireOnCell(row: Int, column: Int)
+}
 
 class GameView: UIView {
     
-    private var _startX: CGFloat = 0
-    private var _startY: CGFloat = 0
+    private var _clickedCellX: Int?
+    private var _clickedCellY: Int?
     
-    
-    var color: CGColor = UIColor.blackColor().CGColor
-    var endCap: CGLineCap = CGLineCap.Round
-    var lineJoin: CGLineJoin = CGLineJoin.Round
-    var width: Float = 10
-    
-    //weak var delegate: PaintingDelegate? = nil
+    weak var delegate: GridDelegate? = nil
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -36,9 +30,30 @@ class GameView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
+        super.touchesEnded(touches, withEvent: event)
+        let touch: UITouch = touches.first!
+        let touchPoint: CGPoint = touch.locationInView(self)
+        let cellSizeX = bounds.height * CGFloat(0.046)
+        let cellSizeY = bounds.height * CGFloat(0.035)
+        _clickedCellX = Int(touchPoint.x / cellSizeX) - 1
+        _clickedCellY = Int((touchPoint.y - bounds.height * 0.565) / cellSizeY) - 1
+    }
+    
     override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
         super.touchesEnded(touches, withEvent: event)
-
+        let touch: UITouch = touches.first!
+        let touchPoint: CGPoint = touch.locationInView(self)
+        let cellSizeX = bounds.height * CGFloat(0.046)
+        let cellSizeY = bounds.height * CGFloat(0.035)
+        let releasedCellX = Int(touchPoint.x / cellSizeX) - 1
+        let releasedCellY = Int((touchPoint.y - bounds.height * 0.565) / cellSizeY) - 1
+        
+        if (releasedCellX == _clickedCellX && releasedCellY == _clickedCellY) {
+            if (_clickedCellX >= 0 && _clickedCellX <= 9 && _clickedCellY >= 0 && _clickedCellY <= 9) {
+                delegate?.fireOnCell(_clickedCellX!, column: _clickedCellY!)
+            }
+        }
     }
     
     override func drawRect(rect: CGRect) {
@@ -46,7 +61,7 @@ class GameView: UIView {
         let context: CGContext? = UIGraphicsGetCurrentContext()
         let strokePath: CGMutablePathRef = CGPathCreateMutable()
         CGContextSetLineWidth(context, 1)
-        CGContextSetStrokeColorWithColor(context, UIColor.blackColor().CGColor)
+        CGContextSetStrokeColorWithColor(context, UIColor.lightGrayColor().CGColor)
         
         var gridY = Double(bounds.height) * 0.2
         var gridX = Double(bounds.width) * 0.08181

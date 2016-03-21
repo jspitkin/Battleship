@@ -8,6 +8,10 @@
 
 import Foundation
 
+protocol GameDelegate: class {
+    func successfulMissle()
+}
+
 class Game {
     // 0 - Water
     // 1 - Not hit ship
@@ -17,6 +21,13 @@ class Game {
     private var _playerOneGameBoard: Array<Array<Int>>
     private var _playerTwoGameBoard: Array<Array<Int>>
     private var _playersTurn: Int
+    
+    var playersTurn: Int {
+        get { return _playersTurn }
+        set { _playersTurn = newValue }
+    }
+    
+     weak var delegate: GameDelegate? = nil
     
     init () {
         _playersTurn = 1
@@ -28,7 +39,18 @@ class Game {
         
     }
     
-    func fireMissle(player: Int, column: Int, row: Int) {
-        
+    func fireMissle(row: Int, column: Int) {
+        changeTurns()
+        print("\(_playersTurn)")
+        delegate?.successfulMissle()
+    }
+    
+    func changeTurns() {
+        if (_playersTurn == 1) {
+            _playersTurn = 2
+        }
+        else {
+            _playersTurn = 1
+        }
     }
 }
