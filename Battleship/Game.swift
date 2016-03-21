@@ -14,10 +14,10 @@ protocol GameDelegate: class {
 
 class Game {
     // 0 - Water
-    // 1 - Not hit ship
+    // 1 - Miss
     // 2 - Hit ship
-    // 3 - Missed missile
-    // 4 - Sunk ship
+    // 3 - Sunk ship
+    // 4 - Ship
     private var _playerOneGameBoard: Array<Array<Int>>
     private var _playerTwoGameBoard: Array<Array<Int>>
     private var _playersTurn: Int
@@ -54,19 +54,53 @@ class Game {
         
     }
     
+    // 0 - Water
+    // 1 - Miss
+    // 2 - Hit ship
+    // 3 - Sunk ship
+    // 4 - Ship
     func fireMissle(row: Int, column: Int) {
         
+        if (playersTurn == 1) {
+            let hitCellValueTwo: Int = _playerTwoGameBoard[row][column]
+            if (hitCellValueTwo == 1 || hitCellValueTwo == 2 || hitCellValueTwo == 3) {
+                gameStatusMessage = "Invalid Missle"
+            }
+            else if (hitCellValueTwo == 0) {
+                _playerTwoGameBoard[row][column] = 1
+                gameStatusMessage = "MISS!"
+            }
+            else if (hitCellValueTwo == 4) {
+                _playerTwoGameBoard[row][column] = 2
+                gameStatusMessage = "HIT!"
+            }
+        }
+        else {
+            let hitCellValueOne: Int = _playerOneGameBoard[row][column]
+            if (hitCellValueOne == 1 || hitCellValueOne == 2 || hitCellValueOne == 3) {
+                gameStatusMessage = "Invalid Missle"
+            }
+            else if (hitCellValueOne == 0) {
+                _playerOneGameBoard[row][column] = 1
+                gameStatusMessage = "MISS!"
+            }
+            else if (hitCellValueOne == 4) {
+                _playerOneGameBoard[row][column] = 2
+                gameStatusMessage = "HIT!"
+            }
+            
+        }
         changeTurns()
         delegate?.successfulMissle()
     }
     
     func changeTurns() {
         if (_playersTurn == 1) {
-            gameStatusMessage = "Player Two's Turn"
+            //gameStatusMessage = "Player Two's Turn"
             _playersTurn = 2
         }
         else {
-            gameStatusMessage = "Player One's Turn"
+            //gameStatusMessage = "Player One's Turn"
             _playersTurn = 1
         }
         print("\(gameStatusMessage)")

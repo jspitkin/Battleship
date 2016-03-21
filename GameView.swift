@@ -47,7 +47,6 @@ class GameView: UIView {
         _clickedCellX = Int(touchPoint.x / cellSizeX) - 1
         _clickedCellBottomY = Int((touchPoint.y - bounds.height * 0.565) / cellSizeY) - 1
         _clickedCellTopY = Int((touchPoint.y - bounds.height * 0.2 + 20) / cellSizeY) - 1
-        print("\(touchPoint.x) , \(touchPoint.y)")
     }
     
     override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
@@ -72,8 +71,8 @@ class GameView: UIView {
         // Firing on top board
         if (releasedCellX == _clickedCellX && releasedCellTopY == _clickedCellTopY && _game!.playersTurn == 2) {
             if (_clickedCellX >= 0 && _clickedCellX <= 9 && _clickedCellTopY >= 0 && _clickedCellTopY <= 9) {
-                print("hit: (\(_clickedCellX!),\(_clickedCellTopY))")
-                //delegate?.fireOnCell(_clickedCellX!, column: _clickedCellTopY!)
+                print("hit: (\(_clickedCellX!),\(_clickedCellTopY!))")
+                delegate?.fireOnCell(_clickedCellX!, column: _clickedCellTopY!)
             }
         }
         
@@ -83,17 +82,17 @@ class GameView: UIView {
         super.drawRect(rect)
         
         
-        // Draws the top grid
+        // Draws the bottom grid
         var originTopX = 27.0
         var originTopY = 342.0
         let cellWidth = bounds.height * 0.043
         let cellHeight = bounds.height * 0.032
-        for column in 0...(_game!.playerOneGameBoard.count - 1) {
-            for row in 0...(_game!.playerOneGameBoard.count - 1) {
+        for column in 0...(_game!.playerTwoGameBoard.count - 1) {
+            for row in 0...(_game!.playerTwoGameBoard.count - 1) {
                 let context = UIGraphicsGetCurrentContext()
                 CGContextSetLineWidth(context, 1.0)
-                var squareColor: UIColor = getSquareColor(_game!.playerOneGameBoard[row][column])
-                if (game.playersTurn == 2 && _game!.playerOneGameBoard[row][column] == 4) {
+                var squareColor: UIColor = getSquareColor(_game!.playerTwoGameBoard[row][column])
+                if (game.playersTurn == 2 && _game!.playerTwoGameBoard[row][column] == 4) {
                     squareColor = UIColor.cyanColor()
                 }
                 CGContextSetStrokeColorWithColor(context, squareColor.CGColor)
@@ -108,15 +107,15 @@ class GameView: UIView {
             originTopX = 27.0
         }
         
-        // Draws the bottom grid
+        // Draws the top grid
         var originBottomX = 27.0
         var originBottomY = 115.0
         for column in 0...(_game!.playerOneGameBoard.count - 1) {
             for row in 0...(_game!.playerOneGameBoard.count - 1) {
                 let context = UIGraphicsGetCurrentContext()
                 CGContextSetLineWidth(context, 1.0)
-                var squareColor: UIColor = getSquareColor(_game!.playerTwoGameBoard[row][column])
-                if (game.playersTurn == 1 && _game!.playerTwoGameBoard[row][column] == 4) {
+                var squareColor: UIColor = getSquareColor(_game!.playerOneGameBoard[row][column])
+                if (game.playersTurn == 1 && _game!.playerOneGameBoard[row][column] == 4) {
                     squareColor = UIColor.cyanColor()
                 }
                 CGContextSetStrokeColorWithColor(context, squareColor.CGColor)
@@ -161,22 +160,22 @@ class GameView: UIView {
     }
     
     // 0 - Water
-    // 1 - Not hit ship
+    // 1 - Miss
     // 2 - Hit ship
     // 3 - Sunk ship
-    // 4 - ship
+    // 4 - Ship
     func getSquareColor(squareCode: Int) -> UIColor {
         switch squareCode {
         case 0:
             return UIColor.cyanColor()
         case 1:
-            return UIColor.blackColor()
+            return UIColor.lightGrayColor()
         case 2:
             return UIColor.yellowColor()
         case 3:
             return UIColor.redColor()
         case 4:
-            return UIColor.lightGrayColor()
+            return UIColor.brownColor()
         default:
             return UIColor.cyanColor()
         }

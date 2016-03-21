@@ -71,6 +71,14 @@ class GameViewController: UIViewController, GridDelegate, GameDelegate, ChangeDe
         playerTwoLabel.textAlignment = NSTextAlignment.Center
         playerTwoLabel.text = "Player Two"
         self.view.addSubview(playerTwoLabel)
+        
+        self.navigationItem.hidesBackButton = true
+        let gameListButton = UIBarButtonItem(title: "Game List", style: UIBarButtonItemStyle.Plain, target: self, action: "backToGameList")
+        self.navigationItem.leftBarButtonItem = gameListButton;
+    }
+    
+    func backToGameList() {
+        self.navigationController?.popViewControllerAnimated(true)
     }
     
     override func didReceiveMemoryWarning() {
@@ -84,12 +92,27 @@ class GameViewController: UIViewController, GridDelegate, GameDelegate, ChangeDe
     
     func successfulMissle() {
         _gameInformation!.text = game.gameStatusMessage
-        sleep(2)
-        self.navigationController?.pushViewController(_changeUserViewController, animated: true)
+
+        // Pause for two seconds to user can see result before passing device
+        let delayTime = dispatch_time(DISPATCH_TIME_NOW, Int64(NSEC_PER_SEC * 2))
+        dispatch_after(delayTime, dispatch_get_main_queue()){
+            self.passToEnemyScreen()
+        }
         gameView?.setNeedsDisplay()
     }
     
+    func passToEnemyScreen() {
+        self.navigationController?.pushViewController(_changeUserViewController, animated: true)
+    }
+    
     func changeTurn() {
+        if (_game?.playersTurn == 2) {
+            _game?.gameStatusMessage = "Player Two's Turn"
+        }
+        else {
+            _game?.gameStatusMessage = "Player One's Turn"
+        }
+        _gameInformation?.text = game.gameStatusMessage
         self.navigationController?.popViewControllerAnimated(true)
     }
 }
