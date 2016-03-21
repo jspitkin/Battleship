@@ -12,7 +12,7 @@ class GameViewController: UIViewController, GridDelegate, GameDelegate, ChangeDe
     
     private var _gameList: GameList!
     private var _gameIndex: Int?
-    private var _game: Game = Game()
+    private var _game: Game?
     private var _gameView: GameView = GameView()
     private var _changeUserViewController: ChangeUserViewController = ChangeUserViewController()
     private var _gameInformation: UILabel?
@@ -28,7 +28,7 @@ class GameViewController: UIViewController, GridDelegate, GameDelegate, ChangeDe
     }
     
     var game: Game {
-        get { return _game }
+        get { return _game! }
         set { _game = newValue }
     }
     
@@ -37,20 +37,25 @@ class GameViewController: UIViewController, GridDelegate, GameDelegate, ChangeDe
         set { _gameView = newValue! }
     }
     
+    convenience init() {
+        self.init(nibName:nil, bundle:nil)
+        _gameInformation = UILabel(frame: CGRectMake(57, 80, 200, 30))
+        _gameInformation!.textColor = UIColor.blackColor()
+        _gameInformation!.font = UIFont.systemFontOfSize(24)
+        _gameInformation!.textAlignment = NSTextAlignment.Center
+    }
+    
     override func loadView() {
         view = _gameView
         _gameView.delegate = self
-        _game.delegate = self
+        _game!.delegate = self
         _changeUserViewController.changeView.delegate = self
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        _gameInformation = UILabel(frame: CGRectMake(57, 80, 200, 30))
-        _gameInformation!.textColor = UIColor.blackColor()
-        _gameInformation!.font = UIFont.systemFontOfSize(24)
-        _gameInformation!.textAlignment = NSTextAlignment.Center
-        _gameInformation!.text = "Player One's Turn"
+        _gameInformation!.text = game.gameStatusMessage
+        _gameView.game = _game!
         self.view.addSubview(_gameInformation!)
     }
     
@@ -64,12 +69,10 @@ class GameViewController: UIViewController, GridDelegate, GameDelegate, ChangeDe
     }
     
     func successfulMissle() {
+        _gameInformation!.text = game.gameStatusMessage
+        sleep(2)
         self.navigationController?.pushViewController(_changeUserViewController, animated: true)
-        if (game.playersTurn == 1) {
-            _gameInformation!.text = "Player One's Turn"
-        } else {
-            _gameInformation!.text = "Player Two's Turn"
-        }
+        gameView?.setNeedsDisplay()
     }
     
     func changeTurn() {

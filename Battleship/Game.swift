@@ -21,10 +21,24 @@ class Game {
     private var _playerOneGameBoard: Array<Array<Int>>
     private var _playerTwoGameBoard: Array<Array<Int>>
     private var _playersTurn: Int
+    private var _gameStatusMessage: String
     
     var playersTurn: Int {
         get { return _playersTurn }
         set { _playersTurn = newValue }
+    }
+    
+    var gameStatusMessage: String {
+        get { return _gameStatusMessage }
+        set { _gameStatusMessage = newValue }
+    }
+    
+    var playerOneGameBoard: Array<Array<Int>> {
+        get { return _playerOneGameBoard }
+    }
+        
+    var playerTwoGameBoard: Array<Array<Int>> {
+        get { return _playerTwoGameBoard }
     }
     
      weak var delegate: GameDelegate? = nil
@@ -33,6 +47,7 @@ class Game {
         _playersTurn = 1
         _playerOneGameBoard = Array(count:10, repeatedValue: Array(count:10, repeatedValue:0))
         _playerTwoGameBoard = Array(count:10, repeatedValue: Array(count:10, repeatedValue:0))
+        _gameStatusMessage = "Player One's Turn"
     }
     
     func placeShips() {
@@ -40,17 +55,20 @@ class Game {
     }
     
     func fireMissle(row: Int, column: Int) {
+        
         changeTurns()
-        print("\(_playersTurn)")
         delegate?.successfulMissle()
     }
     
     func changeTurns() {
         if (_playersTurn == 1) {
+            gameStatusMessage = "Player Two's Turn"
             _playersTurn = 2
         }
         else {
+            gameStatusMessage = "Player One's Turn"
             _playersTurn = 1
         }
+        print("\(gameStatusMessage)")
     }
 }

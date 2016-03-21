@@ -30,7 +30,7 @@ class ChangeUserViewController: UIViewController {
         label.textAlignment = NSTextAlignment.Center
         label.adjustsFontSizeToFitWidth = true
         label.numberOfLines = 3
-        label.text = "Give the device \n to your enemy. \n (click to continue)"
+        label.text = "Give the device \n to your enemy. \n (tap to continue)"
         self.view.addSubview(label)
     }
     

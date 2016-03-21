@@ -18,12 +18,19 @@ class GameView: UIView {
     private var _clickedCellX: Int?
     private var _clickedCellY: Int?
     
+    private var _game: Game?
+    
+    var game: Game {
+        get { return _game! }
+        set { _game = newValue }
+    }
+    
     weak var delegate: GridDelegate? = nil
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        self.backgroundColor = UIColor.cyanColor()
+        self.backgroundColor = UIColor.whiteColor()
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -38,6 +45,7 @@ class GameView: UIView {
         let cellSizeY = bounds.height * CGFloat(0.035)
         _clickedCellX = Int(touchPoint.x / cellSizeX) - 1
         _clickedCellY = Int((touchPoint.y - bounds.height * 0.565) / cellSizeY) - 1
+        print("\(touchPoint.x),\(touchPoint.y)")
     }
     
     override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
@@ -58,9 +66,59 @@ class GameView: UIView {
     
     override func drawRect(rect: CGRect) {
         super.drawRect(rect)
+        
+        
+        // Draws the top grid
+        var originTopX = 27.0
+        var originTopY = 342.0
+        let cellWidth = bounds.height * 0.043
+        let cellHeight = bounds.height * 0.032
+        for column in 0...(_game!.playerOneGameBoard.count - 1) {
+            for row in 0...(_game!.playerOneGameBoard.count - 1) {
+                let context = UIGraphicsGetCurrentContext()
+                CGContextSetLineWidth(context, 1.0)
+                var squareColor: UIColor = getSquareColor(_game!.playerOneGameBoard[row][column])
+                if (game.playersTurn == 2 && _game!.playerOneGameBoard[row][column] == 4) {
+                    squareColor = UIColor.cyanColor()
+                }
+                CGContextSetStrokeColorWithColor(context, squareColor.CGColor)
+                let rectangle = CGRectMake(CGFloat(originTopX), CGFloat(originTopY), cellWidth, cellHeight)
+                originTopX += Double(cellWidth) + 1.7
+                CGContextAddRect(context, rectangle)
+                CGContextStrokePath(context)
+                CGContextSetFillColorWithColor(context, squareColor.CGColor)
+                CGContextFillRect(context, rectangle)
+            }
+            originTopY += Double(cellHeight) + 1.7
+            originTopX = 27.0
+        }
+        
+        // Draws the bottom grid
+        var originBottomX = 27.0
+        var originBottomY = 115.0
+        for column in 0...(_game!.playerOneGameBoard.count - 1) {
+            for row in 0...(_game!.playerOneGameBoard.count - 1) {
+                let context = UIGraphicsGetCurrentContext()
+                CGContextSetLineWidth(context, 1.0)
+                var squareColor: UIColor = getSquareColor(_game!.playerTwoGameBoard[row][column])
+                if (game.playersTurn == 1 && _game!.playerTwoGameBoard[row][column] == 4) {
+                    squareColor = UIColor.cyanColor()
+                }
+                CGContextSetStrokeColorWithColor(context, squareColor.CGColor)
+                let rectangle = CGRectMake(CGFloat(originBottomX), CGFloat(originBottomY), cellWidth, cellHeight)
+                originBottomX += Double(cellWidth) + 1.7
+                CGContextAddRect(context, rectangle)
+                CGContextStrokePath(context)
+                CGContextSetFillColorWithColor(context, squareColor.CGColor)
+                CGContextFillRect(context, rectangle)
+            }
+            originBottomY += Double(cellHeight) + 1.7
+            originBottomX = 27.0
+        }
+        
         let context: CGContext? = UIGraphicsGetCurrentContext()
         let strokePath: CGMutablePathRef = CGPathCreateMutable()
-        CGContextSetLineWidth(context, 1)
+        CGContextSetLineWidth(context, 2)
         CGContextSetStrokeColorWithColor(context, UIColor.lightGrayColor().CGColor)
         
         var gridY = Double(bounds.height) * 0.2
@@ -73,7 +131,7 @@ class GameView: UIView {
             CGPathMoveToPoint(strokePath, nil, CGFloat(gridX), bounds.height * 0.6)
             CGPathAddLineToPoint(strokePath, nil, CGFloat(gridX) , bounds.height * 0.95)
             gridX += Double(bounds.height) * 0.046
-
+            
             CGPathMoveToPoint(strokePath, nil, bounds.width * 0.08181, CGFloat(gridY) + bounds.height * 0.4)
             CGPathAddLineToPoint(strokePath, nil, bounds.width * 0.9, CGFloat(gridY) + bounds.height * 0.4)
             
@@ -85,6 +143,28 @@ class GameView: UIView {
         CGContextAddPath(context, strokePath)
         CGContextStrokePath(context)
         
+    }
+    
+    // 0 - Water
+    // 1 - Not hit ship
+    // 2 - Hit ship
+    // 3 - Sunk ship
+    // 4 - ship
+    func getSquareColor(squareCode: Int) -> UIColor {
+        switch squareCode {
+        case 0:
+            return UIColor.cyanColor()
+        case 1:
+            return UIColor.blackColor()
+        case 2:
+            return UIColor.yellowColor()
+        case 3:
+            return UIColor.redColor()
+        case 4:
+            return UIColor.lightGrayColor()
+        default:
+            return UIColor.cyanColor()
+        }
     }
     
 }

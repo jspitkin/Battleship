@@ -20,7 +20,7 @@ class ChangeUserView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        self.backgroundColor = UIColor.lightGrayColor()
+        self.backgroundColor = UIColor.blackColor()
     }
 
     required init?(coder aDecoder: NSCoder) {

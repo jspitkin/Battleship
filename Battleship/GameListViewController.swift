@@ -26,6 +26,7 @@ class GameListViewController: UITableViewController {
         _gameListView!.dataSource = self
         _gameListView!.delegate = self
         _gameListView!.registerClass(UITableViewCell.self, forCellReuseIdentifier: "cell")
+        _gameListView!.reloadData()
         
     }
     
@@ -35,8 +36,13 @@ class GameListViewController: UITableViewController {
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell: UITableViewCell = _gameListView!.dequeueReusableCellWithIdentifier("cell")! as UITableViewCell
-        cell.textLabel?.text = "Game \(indexPath.item + 1): In Progress"
-        cell.backgroundColor = UIColor.whiteColor()
+        let gameStatus: String = _gameList.gameWithIndex(indexPath.item).gameStatusMessage
+        cell.textLabel?.text = "Game \(indexPath.item + 1): \(gameStatus)"
+        if (indexPath.item % 2 == 1) {
+            cell.backgroundColor = UIColor(red: 28/255, green: 185/255, blue: 255/255, alpha: 0.3)
+        } else {
+            cell.backgroundColor = UIColor.whiteColor()
+        }
         return cell
     }
     
@@ -57,6 +63,7 @@ class GameListViewController: UITableViewController {
         _gameList.addGame(newGame)
         gameViewController.gameList = _gameList
         gameViewController.gameIndex = _gameList.gameCount - 1
+        gameViewController.game = newGame
         _gameListView!.reloadData()
         self.navigationController?.pushViewController(gameViewController, animated: true)
         
