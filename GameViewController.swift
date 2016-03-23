@@ -92,9 +92,13 @@ class GameViewController: UIViewController, GridDelegate, GameDelegate, ChangeDe
     }
     
     func successfulMissle() {
-        _gameInformation!.text = game.gameStatusMessage
         _gameView.setNeedsDisplay()
-        print(game.playersTurn)
+
+        if (game.gameOver) {
+            _gameInformation!.text = game.gameStatusMessage
+            return
+        }
+        _gameInformation!.text = game.gameStatusMessage
         // Pause for two seconds to user can see result before passing device
         let delayTime = dispatch_time(DISPATCH_TIME_NOW, Int64(NSEC_PER_SEC * 2))
         dispatch_after(delayTime, dispatch_get_main_queue()){

@@ -47,6 +47,11 @@ class Game {
     private var _playerTwoDestroyerHits = 0
     private var _playerTwoPatrolBoatHits = 0
     
+    private var _playerOneSunkShips = 0
+    private var _playerTwoSunkShips = 0
+    
+    var gameOver = false
+    
     var playersTurn: Int {
         get { return _playersTurn }
         set { _playersTurn = newValue }
@@ -90,15 +95,14 @@ class Game {
                 addHitPoint(row, column: column)
                 checkForSunkShips()
                 delegate?.successfulMissle()
-                //changeTurns()
             }
             else if (hitCellValueTwo == 4) {
                 _playerTwoGameBoard[row][column] = 2
                 gameStatusMessage = "Hit!"
                 addHitPoint(row, column: column)
                 checkForSunkShips()
+                checkForVictory()
                 delegate?.successfulMissle()
-               // changeTurns()
             }
         }
         else {
@@ -109,17 +113,27 @@ class Game {
                 addHitPoint(row, column: column)
                 checkForSunkShips()
                 delegate?.successfulMissle()
-               // changeTurns()
             }
             else if (hitCellValueOne == 4) {
                 _playerOneGameBoard[row][column] = 2
                 gameStatusMessage = "Hit!"
                 addHitPoint(row, column: column)
                 checkForSunkShips()
+                checkForVictory()
                 delegate?.successfulMissle()
-               // changeTurns()
             }
             
+        }
+    }
+    
+    func checkForVictory() {
+        if (_playerOneSunkShips == 5) {
+            gameStatusMessage = "Player Two Wins!"
+            gameOver = true
+        }
+        if (_playerTwoSunkShips == 5) {
+            gameStatusMessage = "Player One Wins!"
+            gameOver = true
         }
     }
     
@@ -137,23 +151,110 @@ class Game {
             for point in _playerOneCarrier {
                 _playerOneGameBoard[point.row][point.column] = 3
             }
+            _playerOneSunkShips++;
+            _playerOneCarrierHits = 0
             gameStatusMessage = "Carrier Sunk!"
+        }
+        else if (_playerOneBattleshipHits == 4) {
+            for point in _playerOneBattleship {
+                _playerOneGameBoard[point.row][point.column] = 3
+            }
+            _playerOneBattleshipHits = 0
+            _playerOneSunkShips++;
+            gameStatusMessage = "Battleship Sunk!"
+        }
+        else if (_playerOneSubmarineHits == 3) {
+            for point in _playerOneSubmarine {
+                _playerOneGameBoard[point.row][point.column] = 3
+            }
+            _playerOneSubmarineHits = 0
+            _playerOneSunkShips++;
+            gameStatusMessage = "Submarine Sunk!"
+        }
+        else if (_playerOneDestroyerHits == 3) {
+            for point in _playerOneDestroyer {
+                _playerOneGameBoard[point.row][point.column] = 3
+            }
+            _playerOneDestroyerHits = 0
+            _playerOneSunkShips++;
+            gameStatusMessage = "Destroyer Sunk!"
         }
         else if (_playerOnePatrolBoatHits == 2) {
             for point in _playerOnePatrolBoat {
                 _playerOneGameBoard[point.row][point.column] = 3
             }
             _playerOnePatrolBoatHits = 0
+            _playerOneSunkShips++;
             gameStatusMessage = "Patrol Boat Sunk!"
         }
-        
+        if (_playerTwoCarrierHits == 5) {
+            for point in _playerTwoCarrier {
+                _playerTwoGameBoard[point.row][point.column] = 3
+            }
+            _playerTwoSunkShips++;
+            _playerTwoCarrierHits = 0
+            gameStatusMessage = "Carrier Sunk!"
+        }
+        else if (_playerTwoBattleshipHits == 4) {
+            for point in _playerTwoBattleship {
+                _playerTwoGameBoard[point.row][point.column] = 3
+            }
+            _playerTwoBattleshipHits = 0
+            _playerTwoSunkShips++;
+            gameStatusMessage = "Battleship Sunk!"
+        }
+        else if (_playerTwoSubmarineHits == 3) {
+            for point in _playerTwoSubmarine {
+                _playerTwoGameBoard[point.row][point.column] = 3
+            }
+            _playerTwoSubmarineHits = 0
+            _playerTwoSunkShips++;
+            gameStatusMessage = "Submarine Sunk!"
+        }
+        else if (_playerTwoDestroyerHits == 3) {
+            for point in _playerTwoDestroyer {
+                _playerTwoGameBoard[point.row][point.column] = 3
+            }
+            _playerTwoDestroyerHits = 0
+            _playerTwoSunkShips++;
+            gameStatusMessage = "Destroyer Sunk!"
+        }
+        else if (_playerTwoPatrolBoatHits == 2) {
+            for point in _playerTwoPatrolBoat {
+                _playerTwoGameBoard[point.row][point.column] = 3
+            }
+            _playerTwoPatrolBoatHits = 0
+            _playerTwoSunkShips++;
+            gameStatusMessage = "Patrol Boat Sunk!"
+        }
     }
     
     func addHitPoint(row: Int, column: Int) {
-        for point in _playerOneCarrier {
-            if (point.row == row && point.column == column && !point.marked) {
+        for var i = 0; i < _playerOneCarrier.count; i++ {
+            if (_playerOneCarrier[i].row == row && _playerOneCarrier[i].column == column && !_playerOneCarrier[i].marked) {
                 _playerOneCarrierHits++;
-                point
+                _playerOneCarrier[i].marked = true
+                return;
+            }
+        }
+        for var i = 0; i < _playerOneBattleship.count; i++ {
+            if (_playerOneBattleship[i].row == row && _playerOneBattleship[i].column == column && !_playerOneBattleship[i].marked) {
+                _playerOneBattleshipHits++;
+                _playerOneBattleship[i].marked = true
+                return;
+            }
+        }
+        for var i = 0; i < _playerOneSubmarine.count; i++ {
+            if (_playerOneSubmarine[i].row == row && _playerOneSubmarine[i].column == column && !_playerOneSubmarine[i].marked) {
+                _playerOneSubmarineHits++;
+                _playerOneSubmarine[i].marked = true
+                return;
+            }
+        }
+        for var i = 0; i < _playerOneDestroyer.count; i++ {
+            if (_playerOneDestroyer[i].row == row && _playerOneDestroyer[i].column == column && !_playerOneDestroyer[i].marked) {
+                _playerOneDestroyerHits++;
+                _playerOneDestroyer[i].marked = true
                 return;
             }
         }
@@ -165,12 +266,48 @@ class Game {
             }
         }
         
+        for var i = 0; i < _playerTwoCarrier.count; i++ {
+            if (_playerTwoCarrier[i].row == row && _playerTwoCarrier[i].column == column && !_playerTwoCarrier[i].marked) {
+                _playerTwoCarrierHits++;
+                _playerTwoCarrier[i].marked = true
+                return;
+            }
+        }
+        for var i = 0; i < _playerTwoBattleship.count; i++ {
+            if (_playerTwoBattleship[i].row == row && _playerTwoBattleship[i].column == column && !_playerTwoBattleship[i].marked) {
+                _playerTwoBattleshipHits++;
+                _playerTwoBattleship[i].marked = true
+                return;
+            }
+        }
+        for var i = 0; i < _playerTwoSubmarine.count; i++ {
+            if (_playerTwoSubmarine[i].row == row && _playerTwoSubmarine[i].column == column && !_playerTwoSubmarine[i].marked) {
+                _playerTwoSubmarineHits++;
+                _playerTwoSubmarine[i].marked = true
+                return;
+            }
+        }
+        for var i = 0; i < _playerTwoDestroyer.count; i++ {
+            if (_playerTwoDestroyer[i].row == row && _playerTwoDestroyer[i].column == column && !_playerTwoDestroyer[i].marked) {
+                _playerTwoDestroyerHits++;
+                _playerTwoDestroyer[i].marked = true
+                return;
+            }
+        }
+        for var i = 0; i < _playerTwoPatrolBoat.count; i++ {
+            if (_playerTwoPatrolBoat[i].row == row && _playerTwoPatrolBoat[i].column == column && !_playerTwoPatrolBoat[i].marked) {
+                _playerTwoPatrolBoatHits++;
+                _playerTwoPatrolBoat[i].marked = true
+                return;
+            }
+        }
+        
     }
     
     func placeShips() {
         var playerOneCarrierPlaced = false
         var playerOneBattleshipPlaced = false
-        var placeOneSubmarinePlaced = false
+        var playerOneSubmarinePlaced = false
         var playerOneDestroyerPlaced = false
         var playerOnePatrolBoatPlaced = false
         
@@ -184,19 +321,139 @@ class Game {
         var colSelector: Int = 0
         var rowOrColSelector: Int = 0
         
-        while (!playerOnePatrolBoatPlaced) {
+        while (!playerOneCarrierPlaced) {
             rowOrColSelector = Int(arc4random_uniform(UInt32(2)))
-            rowSelector = Int(arc4random_uniform(UInt32(9)))
-            colSelector = Int(arc4random_uniform(UInt32(9)))
             if (rowOrColSelector == 0) {
-                if (_playerOneGameBoard[rowSelector][colSelector] == 0 && _playerOneGameBoard[rowSelector + 1][colSelector] == 0) {
+                rowSelector = Int(arc4random_uniform(UInt32(5)))
+                colSelector = Int(arc4random_uniform(UInt32(10)))
+                if (_playerOneGameBoard[rowSelector][colSelector] == 0 && _playerOneGameBoard[rowSelector + 1][colSelector] == 0 && _playerOneGameBoard[rowSelector + 2][colSelector] == 0 && _playerOneGameBoard[rowSelector + 3][colSelector] == 0 && _playerOneGameBoard[rowSelector + 4][colSelector] == 0) {
                     _playerOneGameBoard[rowSelector][colSelector] = 4
-                    _playerOneGameBoard[rowSelector][colSelector + 1] = 4
-                    _playerOnePatrolBoat.append(Point(row: rowSelector, column: colSelector, marked: false))
-                    _playerOnePatrolBoat.append(Point(row: rowSelector, column: colSelector + 1, marked: false))
-                    playerOnePatrolBoatPlaced = true
+                    _playerOneGameBoard[rowSelector + 1][colSelector] = 4
+                    _playerOneGameBoard[rowSelector + 2][colSelector] = 4
+                    _playerOneGameBoard[rowSelector + 3][colSelector] = 4
+                    _playerOneGameBoard[rowSelector + 4][colSelector] = 4
+                    _playerOneCarrier.append(Point(row: rowSelector, column: colSelector, marked: false))
+                    _playerOneCarrier.append(Point(row: rowSelector + 1, column: colSelector, marked: false))
+                    _playerOneCarrier.append(Point(row: rowSelector + 2, column: colSelector, marked: false))
+                    _playerOneCarrier.append(Point(row: rowSelector + 3, column: colSelector, marked: false))
+                    _playerOneCarrier.append(Point(row: rowSelector + 4, column: colSelector, marked: false))
+                    playerOneCarrierPlaced = true
                 }
             } else {
+                rowSelector = Int(arc4random_uniform(UInt32(10)))
+                colSelector = Int(arc4random_uniform(UInt32(5)))
+                if (_playerOneGameBoard[rowSelector][colSelector] == 0 && _playerOneGameBoard[rowSelector][colSelector + 1] == 0 && _playerOneGameBoard[rowSelector][colSelector + 2] == 0 && _playerOneGameBoard[rowSelector][colSelector + 3] == 0 && _playerOneGameBoard[rowSelector][colSelector + 4] == 0) {
+                    _playerOneGameBoard[rowSelector][colSelector] = 4
+                    _playerOneGameBoard[rowSelector][colSelector + 1] = 4
+                    _playerOneGameBoard[rowSelector][colSelector + 2] = 4
+                    _playerOneGameBoard[rowSelector][colSelector + 3] = 4
+                    _playerOneGameBoard[rowSelector][colSelector + 4] = 4
+                    _playerOneCarrier.append(Point(row: rowSelector, column: colSelector, marked: false))
+                    _playerOneCarrier.append(Point(row: rowSelector, column: colSelector + 1, marked: false))
+                    _playerOneCarrier.append(Point(row: rowSelector, column: colSelector + 2, marked: false))
+                    _playerOneCarrier.append(Point(row: rowSelector, column: colSelector + 3, marked: false))
+                    _playerOneCarrier.append(Point(row: rowSelector, column: colSelector + 4, marked: false))
+                    playerOneCarrierPlaced = true
+                }
+            }
+        }
+        
+        while (!playerOneBattleshipPlaced) {
+            rowOrColSelector = Int(arc4random_uniform(UInt32(2)))
+            if (rowOrColSelector == 0) {
+                rowSelector = Int(arc4random_uniform(UInt32(6)))
+                colSelector = Int(arc4random_uniform(UInt32(10)))
+                if (_playerOneGameBoard[rowSelector][colSelector] == 0 && _playerOneGameBoard[rowSelector + 1][colSelector] == 0 && _playerOneGameBoard[rowSelector + 2][colSelector] == 0 && _playerOneGameBoard[rowSelector + 3][colSelector] == 0) {
+                    _playerOneGameBoard[rowSelector][colSelector] = 4
+                    _playerOneGameBoard[rowSelector + 1][colSelector] = 4
+                    _playerOneGameBoard[rowSelector + 2][colSelector] = 4
+                    _playerOneGameBoard[rowSelector + 3][colSelector] = 4
+                    _playerOneBattleship.append(Point(row: rowSelector, column: colSelector, marked: false))
+                    _playerOneBattleship.append(Point(row: rowSelector + 1, column: colSelector, marked: false))
+                    _playerOneBattleship.append(Point(row: rowSelector + 2, column: colSelector, marked: false))
+                    _playerOneBattleship.append(Point(row: rowSelector + 3, column: colSelector, marked: false))
+                    playerOneBattleshipPlaced = true
+                }
+            } else {
+                rowSelector = Int(arc4random_uniform(UInt32(10)))
+                colSelector = Int(arc4random_uniform(UInt32(6)))
+                if (_playerOneGameBoard[rowSelector][colSelector] == 0 && _playerOneGameBoard[rowSelector][colSelector + 1] == 0 && _playerOneGameBoard[rowSelector][colSelector + 2] == 0 && _playerOneGameBoard[rowSelector][colSelector + 3] == 0) {
+                    _playerOneGameBoard[rowSelector][colSelector] = 4
+                    _playerOneGameBoard[rowSelector][colSelector + 1] = 4
+                    _playerOneGameBoard[rowSelector][colSelector + 2] = 4
+                    _playerOneGameBoard[rowSelector][colSelector + 3] = 4
+                    _playerOneBattleship.append(Point(row: rowSelector, column: colSelector, marked: false))
+                    _playerOneBattleship.append(Point(row: rowSelector, column: colSelector + 1, marked: false))
+                    _playerOneBattleship.append(Point(row: rowSelector, column: colSelector + 2, marked: false))
+                    _playerOneBattleship.append(Point(row: rowSelector, column: colSelector + 3, marked: false))
+                    playerOneBattleshipPlaced = true
+                }
+            }
+        }
+        
+        while (!playerOneSubmarinePlaced) {
+            rowOrColSelector = Int(arc4random_uniform(UInt32(2)))
+            if (rowOrColSelector == 0) {
+                rowSelector = Int(arc4random_uniform(UInt32(7)))
+                colSelector = Int(arc4random_uniform(UInt32(10)))
+                if (_playerOneGameBoard[rowSelector][colSelector] == 0 && _playerOneGameBoard[rowSelector + 1][colSelector] == 0 && _playerOneGameBoard[rowSelector + 2][colSelector] == 0) {
+                    _playerOneGameBoard[rowSelector][colSelector] = 4
+                    _playerOneGameBoard[rowSelector + 1][colSelector] = 4
+                    _playerOneGameBoard[rowSelector + 2][colSelector] = 4
+                    _playerOneSubmarine.append(Point(row: rowSelector, column: colSelector, marked: false))
+                    _playerOneSubmarine.append(Point(row: rowSelector + 1, column: colSelector, marked: false))
+                    _playerOneSubmarine.append(Point(row: rowSelector + 2, column: colSelector, marked: false))
+                    playerOneSubmarinePlaced = true
+                }
+            } else {
+                rowSelector = Int(arc4random_uniform(UInt32(10)))
+                colSelector = Int(arc4random_uniform(UInt32(7)))
+                if (_playerOneGameBoard[rowSelector][colSelector] == 0 && _playerOneGameBoard[rowSelector][colSelector + 1] == 0 && _playerOneGameBoard[rowSelector][colSelector + 2] == 0) {
+                    _playerOneGameBoard[rowSelector][colSelector] = 4
+                    _playerOneGameBoard[rowSelector][colSelector + 1] = 4
+                    _playerOneGameBoard[rowSelector][colSelector + 2] = 4
+                    _playerOneSubmarine.append(Point(row: rowSelector, column: colSelector, marked: false))
+                    _playerOneSubmarine.append(Point(row: rowSelector, column: colSelector + 1, marked: false))
+                    _playerOneSubmarine.append(Point(row: rowSelector, column: colSelector + 2, marked: false))
+                    playerOneSubmarinePlaced = true
+                }
+            }
+        }
+        
+        while (!playerOneDestroyerPlaced) {
+            rowOrColSelector = Int(arc4random_uniform(UInt32(2)))
+            if (rowOrColSelector == 0) {
+                rowSelector = Int(arc4random_uniform(UInt32(7)))
+                colSelector = Int(arc4random_uniform(UInt32(10)))
+                if (_playerOneGameBoard[rowSelector][colSelector] == 0 && _playerOneGameBoard[rowSelector + 1][colSelector] == 0 && _playerOneGameBoard[rowSelector + 2][colSelector] == 0) {
+                    _playerOneGameBoard[rowSelector][colSelector] = 4
+                    _playerOneGameBoard[rowSelector + 1][colSelector] = 4
+                    _playerOneGameBoard[rowSelector + 2][colSelector] = 4
+                    _playerOneDestroyer.append(Point(row: rowSelector, column: colSelector, marked: false))
+                    _playerOneDestroyer.append(Point(row: rowSelector + 1, column: colSelector, marked: false))
+                    _playerOneDestroyer.append(Point(row: rowSelector + 2, column: colSelector, marked: false))
+                    playerOneDestroyerPlaced = true
+                }
+            } else {
+                rowSelector = Int(arc4random_uniform(UInt32(10)))
+                colSelector = Int(arc4random_uniform(UInt32(7)))
+                if (_playerOneGameBoard[rowSelector][colSelector] == 0 && _playerOneGameBoard[rowSelector][colSelector + 1] == 0 && _playerOneGameBoard[rowSelector][colSelector + 2] == 0) {
+                    _playerOneGameBoard[rowSelector][colSelector] = 4
+                    _playerOneGameBoard[rowSelector][colSelector + 1] = 4
+                    _playerOneGameBoard[rowSelector][colSelector + 2] = 4
+                    _playerOneDestroyer.append(Point(row: rowSelector, column: colSelector, marked: false))
+                    _playerOneDestroyer.append(Point(row: rowSelector, column: colSelector + 1, marked: false))
+                    _playerOneDestroyer.append(Point(row: rowSelector, column: colSelector + 2, marked: false))
+                    playerOneDestroyerPlaced = true
+                }
+            }
+        }
+        
+        while (!playerOnePatrolBoatPlaced) {
+            rowOrColSelector = Int(arc4random_uniform(UInt32(2)))
+            if (rowOrColSelector == 0) {
+                rowSelector = Int(arc4random_uniform(UInt32(8)))
+                colSelector = Int(arc4random_uniform(UInt32(10)))
                 if (_playerOneGameBoard[rowSelector][colSelector] == 0 && _playerOneGameBoard[rowSelector + 1][colSelector] == 0) {
                     _playerOneGameBoard[rowSelector][colSelector] = 4
                     _playerOneGameBoard[rowSelector + 1][colSelector] = 4
@@ -204,22 +461,152 @@ class Game {
                     _playerOnePatrolBoat.append(Point(row: rowSelector + 1, column: colSelector, marked: false))
                     playerOnePatrolBoatPlaced = true
                 }
+            } else {
+                rowSelector = Int(arc4random_uniform(UInt32(10)))
+                colSelector = Int(arc4random_uniform(UInt32(8)))
+                if (_playerOneGameBoard[rowSelector][colSelector] == 0 && _playerOneGameBoard[rowSelector][colSelector + 1] == 0) {
+                    _playerOneGameBoard[rowSelector][colSelector] = 4
+                    _playerOneGameBoard[rowSelector][colSelector + 1] = 4
+                    _playerOnePatrolBoat.append(Point(row: rowSelector, column: colSelector, marked: false))
+                    _playerOnePatrolBoat.append(Point(row: rowSelector, column: colSelector + 1, marked: false))
+                    playerOnePatrolBoatPlaced = true
+                }
+            }
+        }
+
+        while (!playerTwoCarrierPlaced) {
+            rowOrColSelector = Int(arc4random_uniform(UInt32(2)))
+            if (rowOrColSelector == 0) {
+                rowSelector = Int(arc4random_uniform(UInt32(5)))
+                colSelector = Int(arc4random_uniform(UInt32(10)))
+                if (_playerTwoGameBoard[rowSelector][colSelector] == 0 && _playerTwoGameBoard[rowSelector + 1][colSelector] == 0 && _playerTwoGameBoard[rowSelector + 2][colSelector] == 0 && _playerTwoGameBoard[rowSelector + 3][colSelector] == 0 && _playerTwoGameBoard[rowSelector + 4][colSelector] == 0) {
+                    _playerTwoGameBoard[rowSelector][colSelector] = 4
+                    _playerTwoGameBoard[rowSelector + 1][colSelector] = 4
+                    _playerTwoGameBoard[rowSelector + 2][colSelector] = 4
+                    _playerTwoGameBoard[rowSelector + 3][colSelector] = 4
+                    _playerTwoGameBoard[rowSelector + 4][colSelector] = 4
+                    _playerTwoCarrier.append(Point(row: rowSelector, column: colSelector, marked: false))
+                    _playerTwoCarrier.append(Point(row: rowSelector + 1, column: colSelector, marked: false))
+                    _playerTwoCarrier.append(Point(row: rowSelector + 2, column: colSelector, marked: false))
+                    _playerTwoCarrier.append(Point(row: rowSelector + 3, column: colSelector, marked: false))
+                    _playerTwoCarrier.append(Point(row: rowSelector + 4, column: colSelector, marked: false))
+                    playerTwoCarrierPlaced = true
+                }
+            } else {
+                rowSelector = Int(arc4random_uniform(UInt32(10)))
+                colSelector = Int(arc4random_uniform(UInt32(5)))
+                if (_playerTwoGameBoard[rowSelector][colSelector] == 0 && _playerTwoGameBoard[rowSelector][colSelector + 1] == 0 && _playerTwoGameBoard[rowSelector][colSelector + 2] == 0 && _playerTwoGameBoard[rowSelector][colSelector + 3] == 0 && _playerTwoGameBoard[rowSelector][colSelector + 4] == 0) {
+                    _playerTwoGameBoard[rowSelector][colSelector] = 4
+                    _playerTwoGameBoard[rowSelector][colSelector + 1] = 4
+                    _playerTwoGameBoard[rowSelector][colSelector + 2] = 4
+                    _playerTwoGameBoard[rowSelector][colSelector + 3] = 4
+                    _playerTwoGameBoard[rowSelector][colSelector + 4] = 4
+                    _playerTwoCarrier.append(Point(row: rowSelector, column: colSelector, marked: false))
+                    _playerTwoCarrier.append(Point(row: rowSelector, column: colSelector + 1, marked: false))
+                    _playerTwoCarrier.append(Point(row: rowSelector, column: colSelector + 2, marked: false))
+                    _playerTwoCarrier.append(Point(row: rowSelector, column: colSelector + 3, marked: false))
+                    _playerTwoCarrier.append(Point(row: rowSelector, column: colSelector + 4, marked: false))
+                    playerTwoCarrierPlaced = true
+                }
+            }
+        }
+        
+        while (!playerTwoBattleshipPlaced) {
+            rowOrColSelector = Int(arc4random_uniform(UInt32(2)))
+            if (rowOrColSelector == 0) {
+                rowSelector = Int(arc4random_uniform(UInt32(6)))
+                colSelector = Int(arc4random_uniform(UInt32(10)))
+                if (_playerTwoGameBoard[rowSelector][colSelector] == 0 && _playerTwoGameBoard[rowSelector + 1][colSelector] == 0 && _playerTwoGameBoard[rowSelector + 2][colSelector] == 0 && _playerTwoGameBoard[rowSelector + 3][colSelector] == 0) {
+                    _playerTwoGameBoard[rowSelector][colSelector] = 4
+                    _playerTwoGameBoard[rowSelector + 1][colSelector] = 4
+                    _playerTwoGameBoard[rowSelector + 2][colSelector] = 4
+                    _playerTwoGameBoard[rowSelector + 3][colSelector] = 4
+                    _playerTwoBattleship.append(Point(row: rowSelector, column: colSelector, marked: false))
+                    _playerTwoBattleship.append(Point(row: rowSelector + 1, column: colSelector, marked: false))
+                    _playerTwoBattleship.append(Point(row: rowSelector + 2, column: colSelector, marked: false))
+                    _playerTwoBattleship.append(Point(row: rowSelector + 3, column: colSelector, marked: false))
+                    playerTwoBattleshipPlaced = true
+                }
+            } else {
+                rowSelector = Int(arc4random_uniform(UInt32(10)))
+                colSelector = Int(arc4random_uniform(UInt32(6)))
+                if (_playerTwoGameBoard[rowSelector][colSelector] == 0 && _playerTwoGameBoard[rowSelector][colSelector + 1] == 0 && _playerTwoGameBoard[rowSelector][colSelector + 2] == 0 && _playerTwoGameBoard[rowSelector][colSelector + 3] == 0) {
+                    _playerTwoGameBoard[rowSelector][colSelector] = 4
+                    _playerTwoGameBoard[rowSelector][colSelector + 1] = 4
+                    _playerTwoGameBoard[rowSelector][colSelector + 2] = 4
+                    _playerTwoGameBoard[rowSelector][colSelector + 3] = 4
+                    _playerTwoBattleship.append(Point(row: rowSelector, column: colSelector, marked: false))
+                    _playerTwoBattleship.append(Point(row: rowSelector, column: colSelector + 1, marked: false))
+                    _playerTwoBattleship.append(Point(row: rowSelector, column: colSelector + 2, marked: false))
+                    _playerTwoBattleship.append(Point(row: rowSelector, column: colSelector + 3, marked: false))
+                    playerTwoBattleshipPlaced = true
+                }
+            }
+        }
+        
+        while (!playerTwoSubmarinePlaced) {
+            rowOrColSelector = Int(arc4random_uniform(UInt32(2)))
+            if (rowOrColSelector == 0) {
+                rowSelector = Int(arc4random_uniform(UInt32(7)))
+                colSelector = Int(arc4random_uniform(UInt32(10)))
+                if (_playerTwoGameBoard[rowSelector][colSelector] == 0 && _playerTwoGameBoard[rowSelector + 1][colSelector] == 0 && _playerTwoGameBoard[rowSelector + 2][colSelector] == 0) {
+                    _playerTwoGameBoard[rowSelector][colSelector] = 4
+                    _playerTwoGameBoard[rowSelector + 1][colSelector] = 4
+                    _playerTwoGameBoard[rowSelector + 2][colSelector] = 4
+                    _playerTwoSubmarine.append(Point(row: rowSelector, column: colSelector, marked: false))
+                    _playerTwoSubmarine.append(Point(row: rowSelector + 1, column: colSelector, marked: false))
+                    _playerTwoSubmarine.append(Point(row: rowSelector + 2, column: colSelector, marked: false))
+                    playerTwoSubmarinePlaced = true
+                }
+            } else {
+                rowSelector = Int(arc4random_uniform(UInt32(10)))
+                colSelector = Int(arc4random_uniform(UInt32(7)))
+                if (_playerTwoGameBoard[rowSelector][colSelector] == 0 && _playerTwoGameBoard[rowSelector][colSelector + 1] == 0 && _playerTwoGameBoard[rowSelector][colSelector + 2] == 0) {
+                    _playerTwoGameBoard[rowSelector][colSelector] = 4
+                    _playerTwoGameBoard[rowSelector][colSelector + 1] = 4
+                    _playerTwoGameBoard[rowSelector][colSelector + 2] = 4
+                    _playerTwoSubmarine.append(Point(row: rowSelector, column: colSelector, marked: false))
+                    _playerTwoSubmarine.append(Point(row: rowSelector, column: colSelector + 1, marked: false))
+                    _playerTwoSubmarine.append(Point(row: rowSelector, column: colSelector + 2, marked: false))
+                    playerTwoSubmarinePlaced = true
+                }
+            }
+        }
+        
+        while (!playerTwoDestroyerPlaced) {
+            rowOrColSelector = Int(arc4random_uniform(UInt32(2)))
+            if (rowOrColSelector == 0) {
+                rowSelector = Int(arc4random_uniform(UInt32(7)))
+                colSelector = Int(arc4random_uniform(UInt32(10)))
+                if (_playerTwoGameBoard[rowSelector][colSelector] == 0 && _playerTwoGameBoard[rowSelector + 1][colSelector] == 0 && _playerTwoGameBoard[rowSelector + 2][colSelector] == 0) {
+                    _playerTwoGameBoard[rowSelector][colSelector] = 4
+                    _playerTwoGameBoard[rowSelector + 1][colSelector] = 4
+                    _playerTwoGameBoard[rowSelector + 2][colSelector] = 4
+                    _playerTwoDestroyer.append(Point(row: rowSelector, column: colSelector, marked: false))
+                    _playerTwoDestroyer.append(Point(row: rowSelector + 1, column: colSelector, marked: false))
+                    _playerTwoDestroyer.append(Point(row: rowSelector + 2, column: colSelector, marked: false))
+                    playerTwoDestroyerPlaced = true
+                }
+            } else {
+                rowSelector = Int(arc4random_uniform(UInt32(10)))
+                colSelector = Int(arc4random_uniform(UInt32(7)))
+                if (_playerTwoGameBoard[rowSelector][colSelector] == 0 && _playerTwoGameBoard[rowSelector][colSelector + 1] == 0 && _playerTwoGameBoard[rowSelector][colSelector + 2] == 0) {
+                    _playerTwoGameBoard[rowSelector][colSelector] = 4
+                    _playerTwoGameBoard[rowSelector][colSelector + 1] = 4
+                    _playerTwoGameBoard[rowSelector][colSelector + 2] = 4
+                    _playerTwoDestroyer.append(Point(row: rowSelector, column: colSelector, marked: false))
+                    _playerTwoDestroyer.append(Point(row: rowSelector, column: colSelector + 1, marked: false))
+                    _playerTwoDestroyer.append(Point(row: rowSelector, column: colSelector + 2, marked: false))
+                    playerTwoDestroyerPlaced = true
+                }
             }
         }
         
         while (!playerTwoPatrolBoatPlaced) {
             rowOrColSelector = Int(arc4random_uniform(UInt32(2)))
-            rowSelector = Int(arc4random_uniform(UInt32(9)))
-            colSelector = Int(arc4random_uniform(UInt32(9)))
             if (rowOrColSelector == 0) {
-                if (_playerTwoGameBoard[rowSelector][colSelector] == 0 && _playerTwoGameBoard[rowSelector + 1][colSelector] == 0) {
-                    _playerTwoGameBoard[rowSelector][colSelector] = 4
-                    _playerTwoGameBoard[rowSelector][colSelector + 1] = 4
-                    _playerTwoPatrolBoat.append(Point(row: rowSelector, column: colSelector, marked: false))
-                    _playerTwoPatrolBoat.append(Point(row: rowSelector, column: colSelector + 1, marked: false))
-                    playerTwoPatrolBoatPlaced = true
-                }
-            } else {
+                rowSelector = Int(arc4random_uniform(UInt32(8)))
+                colSelector = Int(arc4random_uniform(UInt32(10)))
                 if (_playerTwoGameBoard[rowSelector][colSelector] == 0 && _playerTwoGameBoard[rowSelector + 1][colSelector] == 0) {
                     _playerTwoGameBoard[rowSelector][colSelector] = 4
                     _playerTwoGameBoard[rowSelector + 1][colSelector] = 4
@@ -227,8 +614,19 @@ class Game {
                     _playerTwoPatrolBoat.append(Point(row: rowSelector + 1, column: colSelector, marked: false))
                     playerTwoPatrolBoatPlaced = true
                 }
+            } else {
+                rowSelector = Int(arc4random_uniform(UInt32(10)))
+                colSelector = Int(arc4random_uniform(UInt32(8)))
+                if (_playerTwoGameBoard[rowSelector][colSelector] == 0 && _playerTwoGameBoard[rowSelector][colSelector + 1] == 0) {
+                    _playerTwoGameBoard[rowSelector][colSelector] = 4
+                    _playerTwoGameBoard[rowSelector][colSelector + 1] = 4
+                    _playerTwoPatrolBoat.append(Point(row: rowSelector, column: colSelector, marked: false))
+                    _playerTwoPatrolBoat.append(Point(row: rowSelector, column: colSelector + 1, marked: false))
+                    playerTwoPatrolBoatPlaced = true
+                }
             }
         }
+
     }
 }
 

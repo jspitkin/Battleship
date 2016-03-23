@@ -61,14 +61,14 @@ class GameView: UIView {
         let releasedCellTopY = Int((touchPoint.y - bounds.height * 0.2 + 20) / cellSizeY) - 1
         
         // Firing on bottom board
-        if (releasedCellX == _clickedCellX && releasedCellBottomY == _clickedCellBottomY && _game!.playersTurn == 1) {
+        if (releasedCellX == _clickedCellX && releasedCellBottomY == _clickedCellBottomY && _game!.playersTurn == 1 && !game.gameOver) {
             if (_clickedCellX >= 0 && _clickedCellX <= 9 && _clickedCellBottomY >= 0 && _clickedCellBottomY <= 9) {
                 delegate?.fireOnCell(_clickedCellX!, column: _clickedCellBottomY!)
             }
         }
         
         // Firing on top board
-        if (releasedCellX == _clickedCellX && releasedCellTopY == _clickedCellTopY && _game!.playersTurn == 2) {
+        if (releasedCellX == _clickedCellX && releasedCellTopY == _clickedCellTopY && _game!.playersTurn == 2 && !game.gameOver) {
             if (_clickedCellX >= 0 && _clickedCellX <= 9 && _clickedCellTopY >= 0 && _clickedCellTopY <= 9) {
                 delegate?.fireOnCell(_clickedCellX!, column: _clickedCellTopY!)
             }
