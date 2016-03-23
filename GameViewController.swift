@@ -93,7 +93,8 @@ class GameViewController: UIViewController, GridDelegate, GameDelegate, ChangeDe
     
     func successfulMissle() {
         _gameInformation!.text = game.gameStatusMessage
-
+        _gameView.setNeedsDisplay()
+        print(game.playersTurn)
         // Pause for two seconds to user can see result before passing device
         let delayTime = dispatch_time(DISPATCH_TIME_NOW, Int64(NSEC_PER_SEC * 2))
         dispatch_after(delayTime, dispatch_get_main_queue()){
@@ -103,6 +104,7 @@ class GameViewController: UIViewController, GridDelegate, GameDelegate, ChangeDe
     
     func passToEnemyScreen() {
         self.navigationController?.pushViewController(_changeUserViewController, animated: false)
+        _game?.changeTurns()
         gameView?.setNeedsDisplay()
     }
     
