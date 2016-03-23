@@ -48,10 +48,44 @@ class Game {
         _playerOneGameBoard = Array(count:10, repeatedValue: Array(count:10, repeatedValue:0))
         _playerTwoGameBoard = Array(count:10, repeatedValue: Array(count:10, repeatedValue:0))
         _gameStatusMessage = "Player One's Turn"
+        placeShips()
     }
     
     func placeShips() {
+        var twoShipPlayerOnePlaced = false
+        var threeShipPlayerOnePlaced = false
+        var threeTwoShipPlaceOnePlaced = false
+        var fourShipPlayerOnePlaced = false
+        var fiveShipPlayerOnePlaced = false
         
+        var twoShipPlayerTwoPlaced = false
+        var threeShipPlayerTwoPlaced = false
+        var threeTwoShipPlayerTwoPlaced = false
+        var fourShipPlayerTwoPlaced = false
+        var fiveShipPlayerTwoPlaced = false
+        
+        var rowSelector: Int = 0
+        var colSelector: Int = 0
+        var rowOrColSelector: Int = 0
+        
+        while (!twoShipPlayerOnePlaced) {
+            rowOrColSelector = Int(arc4random_uniform(UInt32(2)))
+            rowSelector = Int(arc4random_uniform(UInt32(9)))
+            colSelector = Int(arc4random_uniform(UInt32(9)))
+            if (rowOrColSelector == 0) {
+                if (_playerOneGameBoard[rowSelector][colSelector] == 0 && _playerOneGameBoard[rowSelector + 1][colSelector] == 0) {
+                    _playerOneGameBoard[rowSelector][colSelector] = 4
+                    _playerOneGameBoard[rowSelector][colSelector + 1] = 4
+                    twoShipPlayerOnePlaced = true
+                }
+            } else {
+                if (_playerOneGameBoard[rowSelector][colSelector] == 0 && _playerOneGameBoard[rowSelector + 1][colSelector] == 0) {
+                    _playerOneGameBoard[rowSelector][colSelector] = 4
+                    _playerOneGameBoard[rowSelector + 1][colSelector] = 4
+                    twoShipPlayerOnePlaced = true
+                }
+            }
+        }
     }
     
     // 0 - Water

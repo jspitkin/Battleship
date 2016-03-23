@@ -63,7 +63,6 @@ class GameView: UIView {
         // Firing on bottom board
         if (releasedCellX == _clickedCellX && releasedCellBottomY == _clickedCellBottomY && _game!.playersTurn == 1) {
             if (_clickedCellX >= 0 && _clickedCellX <= 9 && _clickedCellBottomY >= 0 && _clickedCellBottomY <= 9) {
-                print("hit: (\(_clickedCellX!),\(_clickedCellBottomY))")
                 delegate?.fireOnCell(_clickedCellX!, column: _clickedCellBottomY!)
             }
         }
@@ -71,7 +70,6 @@ class GameView: UIView {
         // Firing on top board
         if (releasedCellX == _clickedCellX && releasedCellTopY == _clickedCellTopY && _game!.playersTurn == 2) {
             if (_clickedCellX >= 0 && _clickedCellX <= 9 && _clickedCellTopY >= 0 && _clickedCellTopY <= 9) {
-                print("hit: (\(_clickedCellX!),\(_clickedCellTopY!))")
                 delegate?.fireOnCell(_clickedCellX!, column: _clickedCellTopY!)
             }
         }
@@ -80,8 +78,6 @@ class GameView: UIView {
     
     override func drawRect(rect: CGRect) {
         super.drawRect(rect)
-        
-        
         // Draws the bottom grid
         var originTopX = 27.0
         var originTopY = 342.0
@@ -92,7 +88,7 @@ class GameView: UIView {
                 let context = UIGraphicsGetCurrentContext()
                 CGContextSetLineWidth(context, 1.0)
                 var squareColor: UIColor = getSquareColor(_game!.playerTwoGameBoard[row][column])
-                if (game.playersTurn == 2 && _game!.playerTwoGameBoard[row][column] == 4) {
+                if (game.playersTurn == 1 && _game!.playerTwoGameBoard[row][column] == 4) {
                     squareColor = UIColor.cyanColor()
                 }
                 CGContextSetStrokeColorWithColor(context, squareColor.CGColor)
@@ -115,7 +111,7 @@ class GameView: UIView {
                 let context = UIGraphicsGetCurrentContext()
                 CGContextSetLineWidth(context, 1.0)
                 var squareColor: UIColor = getSquareColor(_game!.playerOneGameBoard[row][column])
-                if (game.playersTurn == 1 && _game!.playerOneGameBoard[row][column] == 4) {
+                if (game.playersTurn == 2 && _game!.playerOneGameBoard[row][column] == 4) {
                     squareColor = UIColor.cyanColor()
                 }
                 CGContextSetStrokeColorWithColor(context, squareColor.CGColor)

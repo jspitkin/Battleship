@@ -50,6 +50,7 @@ class GameViewController: UIViewController, GridDelegate, GameDelegate, ChangeDe
         _gameView.delegate = self
         _game!.delegate = self
         _changeUserViewController.changeView.delegate = self
+        _gameView.game = game
     }
     
     override func viewDidLoad() {
@@ -98,11 +99,11 @@ class GameViewController: UIViewController, GridDelegate, GameDelegate, ChangeDe
         dispatch_after(delayTime, dispatch_get_main_queue()){
             self.passToEnemyScreen()
         }
-        gameView?.setNeedsDisplay()
     }
     
     func passToEnemyScreen() {
-        self.navigationController?.pushViewController(_changeUserViewController, animated: true)
+        self.navigationController?.pushViewController(_changeUserViewController, animated: false)
+        gameView?.setNeedsDisplay()
     }
     
     func changeTurn() {
