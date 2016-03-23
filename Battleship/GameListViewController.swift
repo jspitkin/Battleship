@@ -69,6 +69,10 @@ class GameListViewController: UITableViewController {
         
     }
     
+    override func viewDidAppear(animated: Bool) {
+        _gameListView!.reloadData()
+    }
+    
     override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         if editingStyle == UITableViewCellEditingStyle.Delete {
             _gameList.removeGameWithIndex(indexPath.row)
