@@ -27,5 +27,31 @@ class GameList {
         _games.removeAtIndex(gameIndex)
     }
     
+    func saveGames() {
+        do {
+            let documentsPath = NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask)[0]
+            let filePath = documentsPath.URLByAppendingPathComponent("savedGames.txt")
+            
+            for game in _games {
+                let _playerOneGameBoard = try NSJSONSerialization.dataWithJSONObject(game.playerOneGameBoard, options: NSJSONWritingOptions(rawValue: 0))
+                let _playerTwoGameBoard = try NSJSONSerialization.dataWithJSONObject(game.playerTwoGameBoard, options: NSJSONWritingOptions(rawValue: 0))
+                let _playersTurn = try NSJSONSerialization.dataWithJSONObject(game.playersTurn, options: NSJSONWritingOptions(rawValue: 0))
+                let _gameStatusMessage = try NSJSONSerialization.dataWithJSONObject(game.gameStatusMessage, options: NSJSONWritingOptions(rawValue: 0))
+                let gameover = try NSJSONSerialization.dataWithJSONObject(game.gameOver, options: NSJSONWritingOptions(rawValue: 0))
+                
+                if let file = NSFileHandle(forWritingAtPath:filePath.absoluteString) {
+                    file.writeData(_playerOneGameBoard)
+                    file.writeData(_playerTwoGameBoard)
+                    file.writeData(_playersTurn)
+                    file.writeData(_gameStatusMessage)
+                    file.writeData(gameover)
+                }
+                
+            }
+            
+        } catch _ {
+            
+        }
+    }
     
 }
